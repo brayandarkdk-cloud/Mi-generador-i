@@ -1,0 +1,113 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#171521">
+<title>Mi Generador IA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#111019;color:#f7f4ff;
+font:16px system-ui,sans-serif}
+main{max-width:600px;margin:auto;padding:22px}
+h1{font-size:28px;margin-bottom:4px}
+p{color:#bcb7cc;line-height:1.5}
+label{display:block;margin:18px 0 8px;font-weight:600}
+textarea,select,input,button{
+width:100%;padding:13px;border-radius:12px;
+border:1px solid #484256;background:#211e2c;
+color:white;font:inherit}
+textarea{min-height:130px;resize:vertical}
+button{background:#b9a5ff;color:#171020;
+font-weight:700;border:0;margin-top:14px}
+button.secondary{background:#302b40;color:white}
+.panel{background:#1b1826;border:1px solid #393347;
+padding:16px;border-radius:18px;margin-top:18px}
+#status{overflow-wrap:anywhere;font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<h1>Mi Generador IA</h1>
+<p>Estudio de ilustración anime · Prototipo gratuito</p>
+
+<section class="panel">
+<label for="prompt">Describe tu imagen</label>
+<textarea id="prompt"
+placeholder="Ej.: personaje adulto, cabello verde ondulado, luz natural, pose elegante..."></textarea>
+
+<label for="style">Estilo artístico</label>
+<select id="style">
+<option>Anime</option>
+<option selected>Anime semirrealista</option>
+<option>Digital art con sombreado brillante</option>
+<option>Ilustración cinematográfica</option>
+</select>
+
+<label for="ratio">Proporción</label>
+<select id="ratio">
+<option value="2:3">Vertical 2:3</option>
+<option value="1:1">Cuadrada 1:1</option>
+<option value="3:2">Horizontal 3:2</option>
+</select>
+
+<label for="quality">Nivel de detalle</label>
+<select id="quality">
+<option>Equilibrado</option>
+<option>Alto detalle</option>
+<option>Muy detallado</option>
+</select>
+
+<button onclick="prepare()">Preparar prompt</button>
+<button class="secondary" onclick="copyPrompt()">Copiar prompt</button>
+<p id="status" aria-live="polite">
+El motor de generación todavía no está conectado.
+</p>
+</section>
+</main>
+
+<script>
+let prepared = "";
+
+function prepare(){
+ const description =
+ document.getElementById("prompt").value.trim();
+
+ if(!description){
+   document.getElementById("status").textContent =
+   "Escribe una descripción primero.";
+   return;
+ }
+
+ const style = document.getElementById("style").value;
+ const ratio = document.getElementById("ratio").value;
+ const quality = document.getElementById("quality").value;
+
+ prepared = description +
+ ". Estilo: " + style +
+ ". Proporción: " + ratio +
+ ". Detalle: " + quality +
+ ". Personajes inequívocamente adultos, composición cuidada, " +
+ "iluminación coherente, anatomía consistente.";
+
+ document.getElementById("status").textContent =
+ "Prompt preparado. La generación requiere conectar un motor de IA.";
+}
+
+async function copyPrompt(){
+ if(!prepared) prepare();
+ if(!prepared) return;
+
+ try{
+   await navigator.clipboard.writeText(prepared);
+   document.getElementById("status").textContent =
+   "Prompt copiado. Puedes pegarlo en un generador compatible.";
+ }catch(e){
+   document.getElementById("status").textContent =
+   prepared;
+ }
+}
+</script>
+</body>
+</html>
