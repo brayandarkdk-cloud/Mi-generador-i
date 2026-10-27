@@ -1,0 +1,67 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#171521">
+<title>Mi Generador IA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#111019;color:#f7f4ff;font:16px system-ui,sans-serif}
+main{max-width:600px;margin:auto;padding:22px}
+h1{font-size:28px}
+p{color:#bcb7cc;line-height:1.5}
+label{display:block;margin:18px 0 8px;font-weight:600}
+textarea,select,button{width:100%;padding:13px;border-radius:12px;border:1px solid #484256;background:#211e2c;color:white;font:inherit}
+textarea{min-height:130px}
+button{background:#b9a5ff;color:#171020;font-weight:700;margin-top:14px}
+.panel{background:#1b1826;border:1px solid #393347;padding:16px;border-radius:18px;margin-top:18px}
+</style>
+</head>
+<body>
+<main>
+<h1>Mi Generador IA</h1>
+<p>Tu espacio de ilustración digital</p>
+<section class="panel">
+<label for="prompt">Describe la imagen</label>
+<textarea id="prompt" placeholder="Ej.: personaje adulto de anime, cabello verde ondulado, iluminación suave..."></textarea>
+<label for="style">Estilo</label>
+<select id="style">
+<option>Anime</option>
+<option selected>Anime semirrealista</option>
+<option>Digital art con sombreado brillante</option>
+<option>Ilustración cinematográfica</option>
+</select>
+<label for="ratio">Proporción</label>
+<select id="ratio">
+<option>Vertical 2:3</option>
+<option>Cuadrada 1:1</option>
+<option>Horizontal 3:2</option>
+</select>
+<button onclick="prepare()">Preparar descripción</button>
+<button onclick="copyText()">Copiar descripción</button>
+<p id="result">Escribe una descripción para comenzar.</p>
+</section>
+</main>
+<script>
+let finalPrompt="";
+function prepare(){
+ const p=document.getElementById("prompt").value.trim();
+ if(!p){document.getElementById("result").textContent="Primero escribe una descripción.";return}
+ finalPrompt=p+". Estilo: "+document.getElementById("style").value+". Proporción: "+document.getElementById("ratio").value+". Ilustración detallada, iluminación cuidada, personajes adultos.";
+ document.getElementById("result").textContent="Descripción preparada. Falta conectar un motor de generación de imágenes.";
+}
+async function copyText(){
+ if(!finalPrompt)prepare();
+ if(!finalPrompt)return;
+ try{
+ await navigator.clipboard.writeText(finalPrompt);
+ document.getElementById("result").textContent="Descripción copiada.";
+ }catch(e){
+ document.getElementById("result").textContent=finalPrompt;
+ }
+}
+</script>
+</body>
+</html>
